@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Scheduler</title>
+</head>
+<body>
+    <h1>Schedule Your Task</h1>
+    <form id="taskForm">
+        <label for="task">Task Description:</label><br>
+        <input type="text" id="task" name="task" required><br><br>
+        <label for="duration">Duration (minutes):</label><br>
+        <input type="number" id="duration" name="duration" required><br><br>
+        <button type="submit">Add to Calendar</button>
+    </form>
+
+    <script>
+        const form = document.getElementById('taskForm');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const task = document.getElementById('task').value;
+            const duration = document.getElementById('duration').value;
+
+            const response = await fetch('/schedule-task', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ task, duration })
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert('Task added to Google Calendar!');
+            } else {
+                alert('Failed to schedule the task.');
+            }
+        });
+    </script>
+</body>
+</html>
